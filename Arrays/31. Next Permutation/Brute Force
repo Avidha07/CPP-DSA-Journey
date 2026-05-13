@@ -1,0 +1,26 @@
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+            vector<int> original = nums; // Save original before sorting
+        vector<vector<int>> all;
+
+        // Generate all permutations in sorted order
+        sort(nums.begin(), nums.end());
+        do {
+            all.push_back(nums);
+        } while (next_permutation(nums.begin(), nums.end()));
+
+        // Traverse the list to find the original permutation
+        for (int i = 0; i < all.size(); i++) {
+            if (all[i] == original) {
+                // If it's the last permutation, wrap to first
+                if (i == all.size() - 1)
+                    nums = all[0];
+                else
+                    nums = all[i + 1]; // Modify in-place
+                return;
+            }
+        }
+
+    }
+};
