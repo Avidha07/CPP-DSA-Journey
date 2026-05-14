@@ -103,3 +103,7 @@ two_sum/
  ├── optimal.cpp
  └── README.md
 ```
+
+Interview-Level Explanation (Ideal Answer)
+A strong answer would sound like this:
+“We traverse the array once. For every element nums[i], we calculate the complement as target - nums[i]. We check whether this complement already exists in the hash map. If it exists, we return the stored index and the current index. Otherwise, we store the current element and its index in the map for future lookup.”
