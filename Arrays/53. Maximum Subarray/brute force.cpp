@@ -1,24 +1,19 @@
 class Solution {
 public:
+   
     int maxSubArray(vector<int>& nums) {
-        
-        int maxi = nums[0];
-        int sum =0;
 
-        for(int i =0; i<nums.size(); i++){
-            sum = 0;
-            for(int j = i; j<nums.size(); j++)
-            {
-                sum += nums[j];
-
-                maxi = max(sum , maxi);
+        int maxi = INT_MIN; 
+        for (int i = 0; i < nums.size(); i++) {
+            for (int j = i; j < nums.size(); j++) {
+                int sum = 0; 
+                for (int k = i; k <= j; k++) {
+                    sum += nums[k];
+                }
+                maxi = max(maxi, sum);
+                
             }
         }
-        return maxi;
-
-        
+        return maxi; 
     }
 };
-
-//Time Limit Exceeded
-204 / 210 testcases passed
