@@ -353,31 +353,8 @@ Without sorting, we cannot make these decisions efficiently.
 
 ---
 
-### 2. Why can we move the left pointer when the sum is smaller than the target?
 
-If:
-
-sum < target
-
-then we need a larger sum.
-
-Since the array is sorted, moving the left pointer forward selects a larger number, increasing the overall sum and potentially bringing it closer to the target.
-
----
-
-### 3. Why can we move the right pointer when the sum is larger than the target?
-
-If:
-
-sum > target
-
-then we need a smaller sum.
-
-Since the array is sorted, moving the right pointer backward selects a smaller number, reducing the overall sum and potentially bringing it closer to the target.
-
----
-
-### 4. What happens when multiple sums have the same minimum difference?
+### 2. What happens when multiple sums have the same minimum difference?
 
 The problem guarantees that exactly one solution exists.
 
@@ -391,7 +368,7 @@ abs(sum - target) <= diff
 
 ---
 
-### 5. Can this problem be solved without sorting?
+### 3. Can this problem be solved without sorting?
 
 Yes.
 
@@ -405,7 +382,7 @@ Sorting is necessary to achieve the optimized O(n²) solution using Two Pointers
 
 ---
 
-### 6. What is the difference between 3Sum and 3Sum Closest?
+### 4. What is the difference between 3Sum and 3Sum Closest?
 
 #### 3Sum
 
@@ -433,7 +410,7 @@ The goal is not an exact match but the minimum difference from the target.
 
 ---
 
-### 7. Why is the optimal solution O(n²) instead of O(n³)?
+### 5. Why is the optimal solution O(n²) instead of O(n³)?
 
 After sorting:
 
@@ -454,7 +431,7 @@ which is much better than checking all triplets.
 
 ---
 
-### 8. What would change if we needed the actual triplet instead of the sum?
+### 6. What would change if we needed the actual triplet instead of the sum?
 
 Instead of storing only:
 
@@ -470,7 +447,7 @@ At the end, return the triplet rather than the sum.
 
 ---
 
-### 9. Can the Two Pointer technique be applied if the array is not sorted?
+### 7. Can the Two Pointer technique be applied if the array is not sorted?
 
 No.
 
@@ -483,6 +460,6 @@ Without sorting, pointer movement becomes unpredictable and the technique no lon
 
 ---
 
-### 10. How would you explain this optimization to an interviewer in under one minute?
+### 8. How would you explain this optimization to an interviewer in under one minute?
 
 "My brute-force approach checks every possible triplet, resulting in O(n³) time complexity. Since we only need the sum closest to the target, we can sort the array and use the Two Pointer technique. After fixing one element, we place two pointers on the remaining part of the array. If the current sum is too small, we move the left pointer to increase it; if it is too large, we move the right pointer to decrease it. This reduces the overall complexity to O(n²) while using O(1) extra space."
