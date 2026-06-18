@@ -542,6 +542,12 @@ Because the algorithm uses multiple moving boundaries (`low`, `mid`, `high`) to 
 
 ---
 
+### Q8. Why mid <= high and not mid < high?
+
+The range from mid to high represents unprocessed elements. When mid == high, there is still one element left to examine. Using mid < high would skip processing that final element, causing incorrect results for cases like [1,0]. Therefore the correct condition is mid <= high.
+
+---
+
 ## Takeaway
 
 * Brute Force → Sorting → **O(n log n)**
