@@ -367,6 +367,7 @@ This problem belongs to:
 - ✅ Sliding Window
 - ✅ Circular Array
 - ✅ Simulation
+- Circular fixed-size window.
 
 ---
 
