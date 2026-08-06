@@ -1,393 +1,376 @@
-# 881. Boats to Save People
+# 🚣 881. Boats to Save People
 
-**Difficulty:** Medium
-**Topic / Pattern:** Greedy, Two Pointers, Sorting
-**Language:** C++
+> **LeetCode:** 881. Boats to Save People  
+> **Difficulty:** Medium  
+> **Pattern:** Greedy + Two Pointers + Sorting
 
 ---
 
-# Problem Statement
+# 📌 Problem Information
 
-You are given an array `people` where `people[i]` represents the weight of the `i-th` person and an integer `limit` representing the maximum weight a boat can carry.
+- **Problem Name:** Boats to Save People
+- **Platform:** LeetCode
+- **Difficulty:** Medium
+- **Topics:** Greedy, Sorting, Two Pointers
 
-Each boat can carry **at most two people** at a time, provided the sum of their weights does not exceed `limit`.
+---
+
+# 📝 Problem Statement
+
+You are given an array `people` where `people[i]` represents the weight of the `i-th` person.
+
+Each boat:
+
+- Can carry **at most two people**
+- Has a maximum weight capacity of `limit`
 
 Return the **minimum number of boats** required to rescue everyone.
 
-### Example 1
+---
 
-```text
-Input: people = [1,2], limit = 3
-Output: 1
+# 💡 Intuition
+
+Since every boat can carry **only two people**, we should always try to pair the **heaviest person** with the **lightest possible person**.
+
+Why?
+
+- The heaviest person is the hardest to accommodate.
+- If even the lightest person cannot fit with the heaviest, then nobody else can.
+- So the heaviest person must go alone.
+
+This observation naturally leads to a greedy solution.
+
+---
+
+# 🔍 Key Observation
+
+Suppose the people are sorted.
+
+```
+Lightest ---------------------> Heaviest
+      i                        j
 ```
 
-### Example 2
+At every step:
 
-```text
-Input: people = [3,2,2,1], limit = 3
-Output: 3
+### Case 1
+
+```
+people[i] + people[j] <= limit
 ```
 
-### Example 3
+They can share one boat.
 
-```text
-Input: people = [3,5,3,4], limit = 5
-Output: 4
+Move both pointers.
+
+```
+i++
+j--
+boats++
 ```
 
 ---
 
-# Brute Force Approach
+### Case 2
 
-For every heaviest remaining person:
-
-1. Search all remaining people.
-2. Find the heaviest possible partner that can fit within the weight limit.
-3. Mark both as used.
-4. Continue until everyone is assigned a boat.
-
-This approach repeatedly searches for valid partners and becomes expensive for larger inputs.
-
----
-
-# Complexity of Brute Force
-
-### Time Complexity
-
-```text
-O(n²)
+```
+people[i] + people[j] > limit
 ```
 
-For each person, we may need to scan the remaining people to find a valid partner.
+The heaviest person cannot pair even with the lightest.
 
-### Space Complexity
+Therefore, they **must go alone**.
 
-```text
-O(n)
 ```
-
-Used array or bookkeeping structure.
-
----
-
-# Key Observation
-
-The heaviest person is always the most difficult person to place.
-
-* If the heaviest person cannot pair with the lightest person, then they cannot pair with anyone else.
-* Therefore, the heaviest person must go alone.
-* If the heaviest and lightest person can fit together, pairing them is always optimal.
-
-This naturally suggests:
-
-* Sort the array.
-* Use two pointers:
-
-  * One at the lightest person.
-  * One at the heaviest person.
-
----
-
-# Optimal Approach with code
-
-### Algorithm
-
-1. Sort the weights.
-2. Place one pointer at the beginning (`i`) and one at the end (`j`).
-3. If `people[i] + people[j] <= limit`:
-
-   * Pair them together.
-   * Move both pointers.
-4. Otherwise:
-
-   * Send the heaviest person alone.
-   * Move only `j`.
-5. Count each boat used.
-
-### C++ Code
-
-```cpp
-class Solution {
-public:
-    int numRescueBoats(vector<int>& people, int limit) {
-        int n = people.size();
-
-        sort(people.begin(), people.end());
-
-        int i = 0;
-        int j = n - 1;
-        int cnt = 0;
-
-        while (i <= j) {
-            int sum = people[i] + people[j];
-
-            if (sum <= limit) {
-                cnt++;
-                i++;
-                j--;
-            } else {
-                cnt++;
-                j--;
-            }
-        }
-
-        return cnt;
-    }
-};
+j--
+boats++
 ```
 
 ---
 
-# Complexity of Optimal Approach
+# 🚀 Approach
 
-### Time Complexity
+### Step 1
 
-```text
-O(n log n)
+Sort the array.
+
 ```
-
-* Sorting takes `O(n log n)`.
-* Two-pointer traversal takes `O(n)`.
-
-Overall:
-
-```text
-O(n log n)
-```
-
-### Space Complexity
-
-```text
-O(1)
-```
-
-Ignoring the space used by the sorting algorithm.
-
----
-
-# Dry Run (step-by-step trace)
-
-### Input
-
-```text
-people = [3,2,2,1]
-limit = 3
-```
-
-### Step 1: Sort
-
-```text
-[1,2,2,3]
-```
-
-```text
-i = 0
-j = 3
-boats = 0
+people = [1,2,2,3]
 ```
 
 ---
 
 ### Step 2
 
-```text
-1 + 3 = 4 > 3
+Initialize
+
 ```
-
-3 goes alone.
-
-```text
-boats = 1
-j = 2
+i = 0
+j = n-1
+boats = 0
 ```
 
 ---
 
 ### Step 3
 
-```text
-1 + 2 = 3 <= 3
-```
+While `i <= j`
 
-Pair them.
+- Check whether the lightest and heaviest can fit together.
+- If yes
+  - Pair them.
+  - Move both pointers.
+- Otherwise
+  - Send the heaviest alone.
+  - Move only the right pointer.
 
-```text
-boats = 2
-i = 1
-j = 1
-```
-
----
-
-### Step 4
-
-Only one person left.
-
-```text
-2 goes alone
-boats = 3
-```
+Increase boat count in both cases.
 
 ---
 
-### Final Answer
+# 🧪 Dry Run
 
-```text
+### Example
+
+```
+people = [3,2,2,1]
+limit = 3
+```
+
+After sorting
+
+```
+[1,2,2,3]
+```
+
+| i | j | Pair | Boats |
+|---|---|------|-------|
+|1|3|1+3 = 4 ❌|1|
+|1|2|1+2 = 3 ✅|2|
+|2|2|2 alone|3|
+
+Answer:
+
+```
 3
 ```
 
 ---
 
-# Edge Cases
+# ✅ Why Greedy Works?
 
-### Case 1: Single Person
+The heaviest person has the fewest pairing options.
 
-```text
-people = [5]
-limit = 5
+If the lightest person cannot fit with the heaviest,
 
-Answer = 1
+then no other person can.
+
+So sending the heaviest alone is always optimal.
+
+Otherwise, pairing the heaviest with the lightest saves the maximum remaining capacity for future pairings.
+
+This guarantees the minimum number of boats.
+
+---
+
+# ⏱ Complexity Analysis
+
+### Time Complexity
+
+Sorting
+
+```
+O(n log n)
+```
+
+Two pointers
+
+```
+O(n)
+```
+
+Overall
+
+```
+O(n log n)
 ```
 
 ---
 
-### Case 2: Nobody Can Pair
+### Space Complexity
 
-```text
-people = [4,4,4,4]
-limit = 4
+```
+O(1)
+```
 
-Answer = 4
+Ignoring the sorting implementation.
+
+---
+
+# ⚠️ Common Mistakes
+
+### ❌ Mistake 1
+
+Using
+
+```cpp
+sort(nums.begin(), nums.end());
+```
+
+There is no variable named `nums`.
+
+Correct:
+
+```cpp
+sort(people.begin(), people.end());
 ```
 
 ---
 
-### Case 3: Everyone Can Pair
+### ❌ Mistake 2
 
-```text
-people = [1,1,1,1]
-limit = 2
+Forgetting
 
-Answer = 2
+```cpp
+while(i <= j)
 ```
+
+When one person is left (`i == j`), they still need one boat.
 
 ---
 
-### Case 4: Exactly Equal to Limit
+### ❌ Mistake 3
 
-```text
-people = [1,2]
-limit = 3
+Trying to pair the heaviest with someone other than the lightest.
 
-Answer = 1
-```
+This can increase the number of boats and break the greedy strategy.
 
 ---
 
-### Case 5: Odd Number of People
+# 🎯 Pattern Recognition
 
-```text
-people = [1,1,2]
-limit = 3
+This problem combines:
 
-Answer = 2
-```
+- Greedy
+- Sorting
+- Two Pointers
+
+Whenever you see:
+
+- Pairing elements
+- Minimize operations
+- Pair smallest with largest
+
+Think about **sorting + two pointers**.
 
 ---
 
-# Interview Explanation (how to narrate it)
+# 💬 How to Explain in an Interview
 
-> Since each boat can carry at most two people, the main challenge is deciding who should be paired together.
+You can explain the solution like this:
+
+> "Since each boat can take at most two people, my goal is to maximize the utilization of every boat.
 >
-> The heaviest person is the hardest person to place. After sorting, I try to pair the heaviest person with the lightest available person.
+> I first sort the weights so that I can easily access the lightest and heaviest people.
 >
-> If they fit within the limit, I place them together because that utilizes the boat efficiently.
+> Then I use two pointers. One starts from the lightest person and the other from the heaviest.
 >
-> If they do not fit, then the heaviest person cannot pair with anyone else, since everyone else is heavier than the lightest person. Therefore, the heaviest person must go alone.
+> At every step, I check whether the lightest and the heaviest can fit in the same boat.
 >
-> Using this greedy observation, I sort the array and apply a two-pointer approach, resulting in an `O(n log n)` solution.
+> If they can, I pair them together because this is the best use of the boat. Then I move both pointers.
+>
+> Otherwise, if even the lightest person cannot fit with the heaviest, then the heaviest cannot fit with anyone else, since everyone else is heavier.
+>
+> Therefore, the heaviest person must go alone. I move only the right pointer.
+>
+> In both cases, one boat is used.
+>
+> This greedy strategy is optimal because the heaviest person always has the fewest pairing choices."
 
 ---
 
-# Follow-up Questions with Answers
+# ❓ Interview Follow-up Questions
 
-### 1. Why do we always try to pair the heaviest person with the lightest person?
+### Why do we sort?
 
-Because if the lightest person cannot fit with the heaviest person, nobody else can. Therefore the heaviest person must go alone.
-
----
-
-### 2. Why does sorting help here?
-
-Sorting allows us to efficiently access:
-
-* Lightest person → left pointer
-* Heaviest person → right pointer
-
-This enables optimal greedy decisions.
+Sorting allows us to efficiently compare the lightest and heaviest person using two pointers.
 
 ---
 
-### 3. Can this problem be solved without sorting?
+### Why pair the lightest with the heaviest?
+
+Because if the lightest cannot fit with the heaviest, nobody else can.
+
+---
+
+### Why isn't Dynamic Programming needed?
+
+Each decision depends only on the current lightest and heaviest after sorting.
+
+The greedy choice is provably optimal.
+
+---
+
+### Can this be solved without sorting?
 
 Not efficiently.
 
-Without sorting, finding suitable partners repeatedly would require extra searching, leading to `O(n²)` complexity.
+Sorting enables the two-pointer greedy approach.
 
 ---
 
-### 4. Why is this a Greedy problem?
+# 💻 C++ Solution
 
-At every step, we make the locally optimal decision:
+```cpp
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
 
-* Pair the heaviest with the lightest whenever possible.
+        sort(people.begin(), people.end());
 
-This local decision leads to the global optimum.
+        int i = 0;
+        int j = people.size() - 1;
+        int boats = 0;
 
----
+        while (i <= j) {
 
-### 5. What happens when `i == j`?
+            if (people[i] + people[j] <= limit) {
+                i++;
+                j--;
+            } else {
+                j--;
+            }
 
-Only one person remains.
+            boats++;
+        }
 
-That person requires one separate boat.
-
----
-
-### 6. Why is the loop condition `i <= j` instead of `i < j`?
-
-When `i == j`, one unassigned person is still left.
-
-We must process that person as well.
-
----
-
-### 7. What if each boat could carry three people instead of two?
-
-The current greedy strategy would no longer be sufficient.
-
-The problem becomes significantly harder and may require different techniques such as greedy heuristics, backtracking, or advanced optimization approaches.
+        return boats;
+    }
+};
+```
 
 ---
 
-### 8. Is this problem similar to Two Sum?
+# 📝 Key Learnings
 
-Partially.
-
-Both use sorting and two pointers, but here we are minimizing the number of boats rather than finding a single pair.
-
----
-
-### 9. What is the most important interview insight?
-
-> If the lightest person cannot fit with the heaviest person, then the heaviest person cannot fit with anyone.
-
-This observation is the foundation of the optimal solution.
+- Greedy works when a locally optimal choice leads to the global optimum.
+- Sorting often simplifies pairing problems.
+- Two pointers reduce nested loops to linear traversal.
+- Always justify why the greedy choice is safe.
 
 ---
 
-### 10. Can we achieve better than `O(n log n)`?
+# 📖 Revision Notes
 
-Not generally.
+✅ Sort the array.
 
-Sorting dominates the runtime, making `O(n log n)` the optimal practical solution for arbitrary inputs.
+✅ Pair the lightest with the heaviest whenever possible.
+
+✅ If they cannot fit together, send the heaviest alone.
+
+✅ Increment the boat count after every decision.
+
+**Rule to Remember:**
+
+> If the lightest person can't fit with the heaviest, no one can.
+```
